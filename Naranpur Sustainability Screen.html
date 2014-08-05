@@ -1,0 +1,766 @@
+	<!--<meta http-equiv="content-type" content="text/html; charset=UTF-8">-->
+		<script type ="text/javascript" src="raphael.js"></script>
+		<script type ="text/javascript" src="g.raphael-min.js"></script>
+		<script type ="text/javascript" src="g3.js"></script>
+		
+<!DOCTYPE html>
+<html>
+	<head>
+	<title>Sustainability Metrics</title>
+	<h1><i>Naranpur Sustainability Screen</i></h1>
+	</head>
+	<body>
+	<script type ="text/javascript" src="jquery-1.11.1.min.js"></script>
+	
+	<div id='radars' class="sustainability"></div>
+	<script>
+	
+		var radars = Raphael(10, 50, 600, 300);//canvas for metric buttons
+		var paper = Raphael(450,250, 0, 400); //canvas for Secondary metric diagrams
+		var paper2 = Raphael(10,250, 0, 400);//canvas for Tertiary metric diagrams
+		var paper3 = Raphael(850,250, 0, 800);//canvas for Primary metric diagrams
+		var paperTTime = Raphael(110, 100, 250, 30);//canvas for Tertiary metric time buttons
+		var paperSTime = Raphael(110, 170, 250, 30);//canvas for Secondary metric time buttons
+		var paperPTime = Raphael(110, 240, 250, 30);//canvas for Primary metric time buttons
+		
+		var prevDate = "7/1/2044";
+		var currentDate = "7/14/2044";
+
+		//values for eco-socio-economic
+		var valuecA =[.6, .154, .25, .6, .60, .50, .60, .450, .4, .20, .15, .20];//current week's data
+		var valueaA = [.9, .154, .2129, .6, .80, .60, .56, .950, .4, .20, .15, .20];//data from previous week
+		var valueA = valuecA;
+		//values for Societal
+		var valuecB = [.10, .1, .4, .01, .15];
+		var valuebB = [.15, 0, .20, .05, .3];
+		var valueB = valuecB;
+		//values for economic
+		var valueccC =[.15, .34, .20, .73882, .16, .10, .3, .08];
+		var valuecC = [.15, .25, .15, .59999, .10, .14, .1, .08];
+		var valueC = valueccC;
+		//values for environmental
+		var valuecD = [.15, .10, .05, .03, .16];	
+		var valuedD = [.15, 0, 0, 0, .16];
+		var valueD = valuecD;
+		//values for socio-economic
+		var valuecE = [.90, .40, .30, .20, .60, .10, .20, .05];
+		var valueeE = [.50, .10, .30, .20, .60, .10, .20, .05];
+		var valueE = valuecE;
+		//values for socio-environmental
+		var valuecF = [.15, .03, .40, .50, .05, .30];
+		var valuefF = [.25, .03, .40, .70, .10, .30];
+		var valueF = valuecF;
+		//values for eco-economic
+		var valuecG = [.10, .03, .08, .05, .20, .07];
+		var valuegG = [.15, 0, 0, 0, .16, .07];
+		var valueG = valuecG;
+			
+		//default setting when browser opens
+		function drawCurrentWLabel(){
+					paper.clear();
+					paper2.clear();
+					paper3.clear();
+					valueA = valuecA;
+					valueB = valuecB;
+					valueC = valueccC;
+					valueD = valuecD;
+					valueE = valuecE;
+					valueF = valuecF;
+					valueG = valuecG;
+					drawRadar7();
+					drawRadar4();
+					drawRadar1();
+					var text12 = paper3.text(250,70,''+ currentDate +'').attr({"font-size": 15});
+					var text12 = paper2.text(200,70,''+ currentDate +'').attr({"font-size": 15});
+					var text12 = paper.text(200,70,''+ currentDate +'').attr({"font-size": 15});
+					};
+
+		drawCurrentWLabel();
+
+		//Button for Eco-economic metric
+		var bBox1 = radars.rect(55, 80, 100, 50, 10).attr({
+				fill: '#509950',
+				stroke: '#3b4449',
+				'stroke-width': 2
+				});
+			var text1 = radars.text(bBox1.attrs.x + bBox1.attrs.width / 2, bBox1.attrs.y + bBox1.attrs.height / 2, 'Eco-economic');
+			var button1 = radars.set().attr({
+				cursor: 'pointer'
+				});
+				button1.push(bBox1);
+				button1.click(function(){
+					paper.clear();
+					drawRadar1();
+					});
+					
+			//Button for Socio-environmental metric		
+			var bBox2 = radars.rect(160, 80, 100, 50, 10).attr({
+					fill: '#509950',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var text2 = radars.text(bBox2.attrs.x + bBox2.attrs.width / 2, bBox2.attrs.y + bBox2.attrs.height / 2, 'Socio-environmental');		
+				var button2 = radars.set().attr({
+					cursor: 'pointer'
+					});
+					button2.push(bBox2);
+					button2.click(function(){
+						paper.clear();
+						drawRadar2();
+						});
+					
+			//Button for Socio-economic metric
+			var bBox3 = radars.rect(265, 80, 100, 50, 10).attr({
+					fill: '#509950',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+			var text3 = radars.text(bBox3.attrs.x + bBox3.attrs.width / 2, bBox3.attrs.y + bBox3.attrs.height / 2, 'Socio-economic');
+			var button3 = radars.set().attr({
+					cursor: 'pointer'
+					});
+					button3.push(bBox3);
+					button3.click(function(){
+						paper.clear();
+						drawRadar3();
+						});
+						
+			//Button for Environmental metric
+			var bBox4 = radars.rect(25, 10, 120, 50, 10).attr({
+					fill: 'lightgreen',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+			var text4 = radars.text(bBox4.attrs.x + bBox4.attrs.width / 2, bBox4.attrs.y + bBox4.attrs.height / 2, 'Environmental');
+			var button4 = radars.set().attr({
+					cursor: 'pointer'
+					});
+					button4.push(bBox4);
+					button4.click(function(){
+						paperTTime.clear();
+						paper2.clear();
+						drawRadar4();
+						});					
+
+			//Button for Economic metric
+			var bBox5 = radars.rect(150, 10, 120, 50, 10).attr({
+					fill: 'lightgreen',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+			var text5 = radars.text(bBox5.attrs.x + bBox5.attrs.width / 2, bBox5.attrs.y + bBox5.attrs.height / 2, 'Economic');
+			var button5 = radars.set().attr({
+				cursor: 'pointer'
+				});
+				button5.push(bBox5);
+				button5.click(function(){
+					paperTTime.clear();
+					paper2.clear();
+					drawRadar5();
+					});
+			
+			//Button for Societal metric		
+			var bBox6 = radars.rect(275, 10, 120, 50, 10).attr({
+					fill: 'lightgreen',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+			var text6 = radars.text(bBox6.attrs.x + bBox6.attrs.width / 2, bBox6.attrs.y + bBox6.attrs.height / 2, 'Societal');
+			var button6 = radars.set().attr({
+				cursor: 'pointer'
+				});
+				button6.push(bBox6);
+				button6.click(function(){
+					paperTTime.clear();
+					paper2.clear();
+					drawRadar6();
+					});
+					
+			//Button for Eco-socio-economic metric
+			var bBox7 = radars.rect(150, 150, 120, 50, 10).attr({
+					fill: '#007030',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+			var text7 = radars.text(bBox7.attrs.x + bBox7.attrs.width / 2, bBox7.attrs.y + bBox7.attrs.height / 2, 'Eco-socio-economic');
+			var button7 = radars.set().attr({
+				cursor: 'pointer'
+				});
+				button7.push(bBox7);
+				button7.click(function(){
+					paper3.clear();
+					drawRadar7();
+					});
+	
+			
+			//Exit button for Tertiary metrics
+			var exitBox_1 = radars.rect(400, 20, 15, 15).attr({
+					fill: 'red',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+			var buttonT = radars.set().attr({
+					cursor: 'pointer'
+					});
+				buttonT.push(exitBox_1);
+				buttonT.click(function(){
+					paper2.clear();
+					});
+		
+			//Exit button for Secondary metrics			
+			var exitBox_2 = radars.rect(400, 80, 15, 15).attr({
+					fill: 'red',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+			var buttonE2 = radars.set().attr({
+					cursor: 'pointer'
+					});
+				buttonE2.push(exitBox_2);
+				buttonE2.click(function(){
+					paper.clear();
+					});		
+			
+			//Exit button for Primary metrics
+			var exitBox_3 = radars.rect(400, 140, 15, 15).attr({
+					fill: 'red',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+			var button8 = radars.set().attr({
+					cursor: 'pointer'
+					});
+				button8.push(exitBox_3);
+				button8.click(function(){
+					paper3.clear();
+					});
+		
+		
+		
+		
+		
+		//Method for drawing Eco-socio-economic metric		
+		function drawRadar7(){
+				var text7 = paper3.text(250,50,'Eco-socio-economic:').attr({"font-size": 20});
+				//Eco-socio-economic spider diagram object
+				var currWeekEES = paper3.radar(250, 250, 150, valueA,
+				{
+					meshSize: 30,
+					labels: ["Water Use Efficiency\n" + (valueA[0]*100)+ "%",
+							"Grain Current Yield\n" +(valueA[1]*1000)+ " kg",
+							"Time to Water Depletion\n" +(valueA[2]*1000)+ " weeks",
+							"Crop Health\n" +(valueA[3]*100)+ "%",
+							"Family Health\n" +(valueA[4]*100)+ "%",
+							"World Health\n" +(valueA[5]*100)+ "%",
+							"Time to Grain Depletion\n" +(valueA[6]*100)+ " weeks",
+							"Water Quality Depletion Rate\n" +(valueA[7]*100)+ "% /week",
+							"Soil Health Depletion Rate\n" +(valueA[8]*100)+ "% /week",
+							"Rate of Human Waste Growth\n" +(valueA[9]*10)+ " kg /week",
+							"Rate of Contaminant Growth\n" +(valueA[10]*10)+ " kg /week",
+							"Rate of Economic Growth\n" +(valueA[11]*10)+ " assets /week"],
+					labelFontSize: 10,
+					drawLabels: true,
+					armFill: 'none',
+					armStroke: 'rgba(255, 106, 0, .5)',
+					armStrokeWidth: 1,
+					drawArms: true,
+					meshFill: 'none',
+					meshStroke: 'rgba(120, 120, 120, .5)',
+					meshStrokeWidth: 2,
+					drawMesh: true,
+					max: 1,
+					pathFill: 'rgba(0, 50, 150, .5)',
+					pathStroke: '#0026ff',
+					pathStrokeWidth: 2,
+					pathCircleOuterRadius: 2,
+					pathCircleInnerRadius:1,
+					drawPathCircles: true
+					});
+				
+				//Previous week button
+				var bBox9 = paperPTime.rect(10, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var text9 = paperPTime.text(bBox9.attrs.x + bBox9.attrs.width / 2, bBox9.attrs.y + bBox9.attrs.height / 2, prevDate);
+				var button9 = paperPTime.set().attr({
+					cursor: 'pointer'
+					});
+					button9.push(bBox9);
+					button9.click(function(){
+					valueA = valueaA;
+					paper3.clear();
+					drawRadar7();
+					var text12 = paper3.text(250,70,''+ prevDate +'').attr({"font-size": 15});
+					});
+					
+				//Current week button	
+				var bBoxcW = paperPTime.rect(110, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var textcW = paperPTime.text(bBoxcW.attrs.x + bBoxcW.attrs.width / 2, bBoxcW.attrs.y + bBoxcW.attrs.height / 2, currentDate);
+				var buttoncW = paperPTime.set().attr({
+					cursor: 'pointer'
+					});
+					buttoncW.push(bBoxcW);
+					buttoncW.click(function(){
+						paper3.clear();
+						valueA = valuecA;
+						drawRadar7();
+						var text12 = paper3.text(250,70,''+ currentDate +'').attr({"font-size": 15});
+						});
+				};
+				
+				
+		//Method for drawing Societal metric		
+		function drawRadar6(){
+				var text61 = paper2.text(200, 50, 'Societal').attr({"font-size": 20});
+				//Societal spider diagram object
+				var currWeekSocio = paper2.radar(200, 200, 100, valueB,
+				{
+					meshSize: 20,
+					labels: ["World Population:\n\n" + valueB[0]*10+ " million",
+						"Rate of Communication:\n" + valueB[1]*10+ " comm/week",
+						"Family Age Distribution:\n" + valueB[2]*100+ "% over 16",
+						"Rate of Family Growth:\n" + valueB[3]*100+ " members/ week",
+						"Family Size:\n" + valueB[4]*100+ " members"],
+					labelFontSize: 10,
+					drawLabels: true,
+					armFill: 'none',
+					armStroke: 'rgba(255, 106, 0, .5)',
+					armStrokeWidth: 1,
+					drawArms: true,
+					meshFill: 'none',
+					meshStroke: 'rgba(120, 120, 120, .5)',
+					meshStrokeWidth: 2,
+					drawMesh: true,
+					max: 1,
+					pathFill: 'rgba(0, 50, 150, .5)',
+					pathStroke: '#0026ff',
+					pathStrokeWidth: 2,
+					pathCircleOuterRadius: 2,
+					pathCircleInnerRadius:1,
+					drawPathCircles: true
+					});
+					
+				//Previous week button	
+				var bBox9 = paperTTime.rect(10, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var text9 = paperTTime.text(bBox9.attrs.x + bBox9.attrs.width / 2, bBox9.attrs.y + bBox9.attrs.height / 2, prevDate);
+				var button9 = paperTTime.set().attr({
+					cursor: 'pointer'
+					});
+					button9.push(bBox9);
+					button9.click(function(){
+						valueB = valuebB;
+						valueC = valuecC;
+						valueD = valuedD;
+						paper2.clear();
+						drawRadar6();
+						var text12 = paper2.text(200,70,''+ prevDate +'').attr({"font-size": 15});
+						});
+						
+				//Current week button		
+				var bBoxcW = paperTTime.rect(110, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var textcW = paperTTime.text(bBoxcW.attrs.x + bBoxcW.attrs.width / 2, bBoxcW.attrs.y + bBoxcW.attrs.height / 2, currentDate);
+				var buttoncW = paperTTime.set().attr({
+					cursor: 'pointer'
+					});
+					buttoncW.push(bBoxcW);
+					buttoncW.click(function(){
+						paper2.clear();
+						valueB = valuecB;
+						valueC = valueccC;
+						valueD = valuecD;
+						drawRadar6();
+						var text12 = paper2.text(200,70,''+ currentDate +'').attr({"font-size": 15});
+						});
+				};
+				
+				
+		//Method for drawing Economic metric		
+		function drawRadar5(){	
+				var text51 = paper2.text(200, 50, 'Economic').attr({"font-size": 20});
+				//Economic spider diagram object
+				var currWeekEcon = paper2.radar(200, 200, 100, valueC,
+				{
+					meshSize: 20,
+					labels: ["Livestock\n" +valueC[0]*10+ " livestock",
+						"Livestock-Food Consumed\n" +valueC[1]*100+ " kg/week",
+						"Livestock Labor Produced\n" +valueC[2]*100+ " BPUs",
+						"Commodities Stored\n" +valueC[3]*10000+ " kg",
+						"Money\n" +valueC[4]*10000+ " rupees",
+						"Agricultural Inputs\n" +valueC[5]*1000+ " kg",
+						"Rate of Store Transactions\n" +valueC[6]*10+ " /week",
+						"Rate of Economic Growth\n" +valueC[7]*100+ " assets/week"],
+					labelFontSize: 10,
+					drawLabels: true,
+					armFill: 'none',
+					armStroke: 'rgba(255, 106, 0, .5)',
+					armStrokeWidth: 1,
+					drawArms: true,
+					meshFill: 'none',
+					meshStroke: 'rgba(120, 120, 120, .5)',
+					meshStrokeWidth: 2,
+					drawMesh: true,
+					max: 1,
+					pathFill: 'rgba(0, 50, 150, .5)',
+					pathStroke: '#0026ff',
+					pathStrokeWidth: 2,
+					pathCircleOuterRadius: 2,
+					pathCircleInnerRadius:1,
+					drawPathCircles: true
+					});
+					
+				//Previous week button	
+				var bBox9 = paperTTime.rect(10, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var text9 = paperTTime.text(bBox9.attrs.x + bBox9.attrs.width / 2, bBox9.attrs.y + bBox9.attrs.height / 2, prevDate);
+				var button9 = paperTTime.set().attr({
+					cursor: 'pointer'
+					});
+					button9.push(bBox9);
+					button9.click(function(){
+						paper2.clear();
+						valueB = valuebB;
+						valueC = valuecC;
+						valueD = valuedD;
+						drawRadar5();
+						var text12 = paper2.text(200,70,''+ prevDate +'').attr({"font-size": 15});
+						});
+						
+				//Current week button		
+				var bBoxcW = paperTTime.rect(110, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var textcW = paperTTime.text(bBoxcW.attrs.x + bBoxcW.attrs.width / 2, bBoxcW.attrs.y + bBoxcW.attrs.height / 2, currentDate);
+				var buttoncW = paperTTime.set().attr({
+					cursor: 'pointer'
+					});
+					buttoncW.push(bBoxcW);
+					buttoncW.click(function(){
+						paper2.clear();
+						valueB = valuecB;
+						valueC = valueccC;
+						valueD = valuecD;
+						drawRadar5();
+						var text12 = paper2.text(200,70,''+ currentDate +'').attr({"font-size": 15});
+						});
+				};
+		
+		
+		//Method for drawing Environmental metric
+		function drawRadar4(){
+				var text41 = paper2.text(200, 50, 'Environmental').attr({"font-size": 20});
+				//Environmental spider diagram object
+				var currWeekEnv = paper2.radar(200, 200, 100, valueD,
+				{
+					meshSize: 20,
+					labels: ["Depth of Water\n" +valueD[0]*1000+ " meters",
+						"Irrigation\n" +valueD[1]*100+ " L/week",
+						"Fertilizer\n" +valueD[2]*1000+ " kg/week",
+						"Pesticide\n" +valueD[3]*1000+ " kg/week",
+						"Rainfall\n" +valueD[4]*100+ " meters"],
+					labelFontSize: 10,
+					drawLabels: true,
+					armFill: 'none',
+					armStroke: 'rgba(255, 106, 0, .5)',
+					armStrokeWidth: 1,
+					drawArms: true,
+					meshFill: 'none',
+					meshStroke: 'rgba(120, 120, 120, .5)',
+					meshStrokeWidth: 2,
+					drawMesh: true,
+					max: 1,
+					pathFill: 'rgba(0, 50, 150, .5)',
+					pathStroke: '#0026ff',
+					pathStrokeWidth: 2,
+					pathCircleOuterRadius: 2,
+					pathCircleInnerRadius:1,
+					drawPathCircles: true
+					});
+					
+				//Previous week button	
+				var bBox9 = paperTTime.rect(10, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var text9 = paperTTime.text(bBox9.attrs.x + bBox9.attrs.width / 2, bBox9.attrs.y + bBox9.attrs.height / 2, prevDate);
+				var button9 = paperTTime.set().attr({
+					cursor: 'pointer'
+					});
+					button9.push(bBox9);
+					button9.click(function(){
+						valueB = valuebB;
+						valueC = valuecC;
+						valueD = valuedD;
+						paper2.clear();
+						drawRadar4();
+						var text12 = paper2.text(200,70,''+ prevDate +'').attr({"font-size": 15});
+						});
+						
+				//Current week button		
+				var bBoxcW = paperTTime.rect(110, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var textcW = paperTTime.text(bBoxcW.attrs.x + bBoxcW.attrs.width / 2, bBoxcW.attrs.y + bBoxcW.attrs.height / 2, currentDate);
+				var buttoncW = paperTTime.set().attr({
+					cursor: 'pointer'
+					});
+					buttoncW.push(bBoxcW);
+					buttoncW.click(function(){
+						paper2.clear();
+						valueB = valuecB;
+						valueC = valueccC;
+						valueD = valuecD;
+						drawRadar4();
+						var text12 = paper2.text(200,70,''+ currentDate +'').attr({"font-size": 15});
+						});
+				};
+			
+			
+		//Method for drawing Socio-economic metric	
+		function drawRadar3(){
+				var text31 = paper.text(200, 50, 'Socio-economic').attr({"font-size": 20});
+				//Socio-economic spider diagram object
+				var currWeekSEcon = paper.radar(200, 200, 100, valueE,
+				{
+					meshSize: 20,
+					labels: ["Labor Efficiency\n" +valueE[0]*100+ " %",
+						"Water Stored\n" +valueE[1]*100+ " L" ,
+						"Grain Stored\n" +valueE[2]*1000+ " kg" ,
+						"Straw Stored\n" +valueE[3]*1000+ " kg" ,
+						"Milk Stored\n" +valueE[4]*1000+ " L" ,
+						"Rate of Trading\n" +valueE[5]*10+ " trades/week" ,
+						"Milk Produced\n" +valueE[6]*100+ " L/week" ,
+						"Labor Available\n" +valueE[7]*100+ " FLUs"],
+					labelFontSize: 10,
+					labelWeight: "bold",
+					drawLabels: true,
+					armFill: 'none',
+					armStroke: 'rgba(255, 106, 0, .5)',
+					armStrokeWidth: 1,
+					drawArms: true,
+					meshFill: 'none',
+					meshStroke: 'rgba(120, 120, 120, .5)',
+					meshStrokeWidth: 2,
+					drawMesh: true,
+					max: 1,
+					pathFill: 'rgba(0, 50, 150, .5)',
+					pathStroke: '#0026ff',
+					pathStrokeWidth: 2,
+					pathCircleOuterRadius: 2,
+					pathCircleInnerRadius:1,
+					drawPathCircles: true,
+					});
+					
+				//Previous week button	
+				var bBox9 = paperSTime.rect(10, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var text9 = paperSTime.text(bBox9.attrs.x + bBox9.attrs.width / 2, bBox9.attrs.y + bBox9.attrs.height / 2, prevDate);
+				var button9 = paperSTime.set().attr({
+					cursor: 'pointer'
+					});
+					button9.push(bBox9);
+					button9.click(function(){
+						valueE = valueeE;
+						valueF = valuefF;
+						valueG = valuegG;
+						paper.clear();
+						drawRadar3();
+						var text12 = paper.text(200,70,''+ prevDate +'').attr({"font-size": 15});
+						});
+						
+				//Current week button		
+				var bBoxcW = paperSTime.rect(110, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var textcW = paperSTime.text(bBoxcW.attrs.x + bBoxcW.attrs.width / 2, bBoxcW.attrs.y + bBoxcW.attrs.height / 2, currentDate);
+				var buttoncW = paperSTime.set().attr({
+					cursor: 'pointer'
+					});
+					buttoncW.push(bBoxcW);
+					buttoncW.click(function(){
+						paper.clear();
+						valueE = valuecE;
+						valueF = valuecF;
+						valueG = valuecG;
+						drawRadar3();
+						var text12 = paper.text(200,70,''+ currentDate +'').attr({"font-size": 15});
+						});
+				};
+			
+			
+		//Method for drawing Socio-environmental metric	
+		function drawRadar2(){		
+				var text21 = paper.text(200, 50, 'Socio-environmental').attr({"font-size": 20});
+				//Socio-environmental spider diagram object
+				var currWeekSEco = paper.radar(200, 200, 100, valueF,
+				{
+					meshSize: 20,
+					labels: ["Human Waste\n" +valueF[0]*100+ " kg",
+						"Contaminants\n" +valueF[1]*100+ " kg",
+						"Water Quality\n" +valueF[2]*100+ "%",
+						"Water Collection Yield\n" +valueF[3]*100+ " L/week",
+						"Water Collection FLUs\n" +valueF[4]*100+ " FLUs",
+						"Grain Produced Current Yield\n" +valueF[5]*100+ " kg"],
+					labelFontSize: 10,
+					drawLabels: true,
+					armFill: 'none',
+					armStroke: 'rgba(255, 106, 0, .5)',
+					armStrokeWidth: 1,
+					drawArms: true,
+					meshFill: 'none',
+					meshStroke: 'rgba(120, 120, 120, .5)',
+					meshStrokeWidth: 2,
+					drawMesh: true,
+					max: 1,
+					pathFill: 'rgba(0, 50, 150, .5)',
+					pathStroke: '#0026ff',
+					pathStrokeWidth: 2,
+					pathCircleOuterRadius: 2,
+					pathCircleInnerRadius:1,
+					drawPathCircles: true,
+					});
+					
+				//Previous week button	
+				var bBox9 = paperSTime.rect(10, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var text9 = paperSTime.text(bBox9.attrs.x + bBox9.attrs.width / 2, bBox9.attrs.y + bBox9.attrs.height / 2, prevDate);
+				var button9 = paperSTime.set().attr({
+					cursor: 'pointer'
+					});
+					button9.push(bBox9);
+					button9.click(function(){
+						valueE = valueeE;
+						valueF = valuefF;
+						valueG = valuegG;
+						paper.clear();
+						drawRadar2();
+						var text12 = paper.text(200,70,''+ prevDate +'').attr({"font-size": 15});
+						});
+						
+				//Current week button		
+				var bBoxcW = paperSTime.rect(110, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var textcW = paperSTime.text(bBoxcW.attrs.x + bBoxcW.attrs.width / 2, bBoxcW.attrs.y + bBoxcW.attrs.height / 2, currentDate);
+				var buttoncW = paperSTime.set().attr({
+					cursor: 'pointer'
+					});
+					buttoncW.push(bBoxcW);
+					buttoncW.click(function(){
+						paper.clear();
+						valueE = valuecE;
+						valueF = valuecF;
+						valueG = valuecG;
+						drawRadar2();
+						var text12 = paper.text(200,70,''+ currentDate +'').attr({"font-size": 15});
+						});
+				};
+		
+		
+		//Method for drawing Eco-economic metric
+		function drawRadar1(){
+				var text11 = paper.text(200, 50, 'Eco-economic').attr({"font-size": 20});
+				//Eco-economic spider diagram object
+				var currWeekEE = paper.radar(200, 200, 100, valueG,
+				{
+					meshSize: 20,
+					labels: ["Acres Used\n" +valueG[0]*100+ " acres",
+						"Percent Crop\n" +valueG[1]*100+ "%",
+						"Land Percentage\n" +valueG[2]*100+ "%",
+						"Straw Produced Current Yield\n" +valueG[3]*1000+ " kg",
+						"Crop Progress\n" +valueG[4]*100+ "%",
+						"Collect Seed\n" +valueG[5]*1000+ " kg"],
+					labelFontSize: 10,
+					drawLabels: true,
+					armFill: 'none',
+					armStroke: 'rgba(255, 106, 0, .5)',
+					armStrokeWidth: 1,
+					drawArms: true,
+					meshFill: 'none',
+					meshStroke: 'rgba(120, 120, 120, .5)',
+					meshStrokeWidth: 2,
+					drawMesh: true,
+					max: 1,
+					pathFill: 'rgba(0, 50, 150, .5)',
+					pathStroke: '#0026ff',
+					pathStrokeWidth: 2,
+					pathCircleOuterRadius: 2,
+					pathCircleInnerRadius:1,
+					drawPathCircles: true,
+					});
+					
+				//Previous week button	
+				var bBox9 = paperSTime.rect(10, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var text9 = paperSTime.text(bBox9.attrs.x + bBox9.attrs.width / 2, bBox9.attrs.y + bBox9.attrs.height / 2, prevDate);
+				var button9 = paperSTime.set().attr({
+					cursor: 'pointer'
+					});
+					button9.push(bBox9);
+					button9.click(function(){
+						valueE = valueeE;
+						valueF = valuefF;
+						valueG = valuegG;
+						paper.clear();
+						drawRadar1();
+						var text12 = paper.text(200,70,''+ prevDate +'').attr({"font-size": 15});
+						});
+						
+				//Current week button		
+				var bBoxcW = paperSTime.rect(110, 10, 100, 20, 10).attr({
+					fill: 'lightblue',
+					stroke: '#3b4449',
+					'stroke-width': 2
+					});
+				var textcW = paperSTime.text(bBoxcW.attrs.x + bBoxcW.attrs.width / 2, bBoxcW.attrs.y + bBoxcW.attrs.height / 2, currentDate);
+				var buttoncW = paperSTime.set().attr({
+					cursor: 'pointer'
+					});
+					buttoncW.push(bBoxcW);
+					buttoncW.click(function(){
+						paper.clear();
+						valueE = valuecE;
+						valueF = valuecF;
+						valueG = valuecG;
+						drawRadar1();
+						var text12 = paper.text(200,70,''+ currentDate +'').attr({"font-size": 15});
+						});
+				};
+	</script>
+	
+	</body>
+</html>
